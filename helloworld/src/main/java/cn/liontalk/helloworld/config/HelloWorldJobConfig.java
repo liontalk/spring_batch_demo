@@ -53,6 +53,8 @@ public class HelloWorldJobConfig {
                 .processor(processor()).writer(writer()).build();
     }
 
+    
+
 
     @Bean
     public Step hello2WorldStep(StepBuilderFactory stepBuilders) {
