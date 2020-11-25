@@ -1,0 +1,24 @@
+server:
+  port: 8100
+spring:
+  application:
+    name: file2oracle
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    username: GWDATA
+    password: GWDATA
+    url: jdbc:oracle:thin:@47.114.58.138:1521:orcl
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: select 1 from dual
+#mybatis-plus配置
+mybatis:
+  mapper-locations: classpath:/mapper/**/*.xml
+  type-aliases-package: cn.liontalk.file2oracle.entity
+
+

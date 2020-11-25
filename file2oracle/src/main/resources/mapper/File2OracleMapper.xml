@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.liontalk.file2oracle.dao.File2OracleMapper">
+
+    <select id="getFile2OracleEntityById" resultType="cn.liontalk.file2oracle.entity.File2OracleEntity">
+        SELECT
+        ID id,
+        FILE_NAME fileName,
+        FILE_CREATE_TIME fileCreateTime,
+        FILE_SIZE fileSize,
+        CREATE_USER  createUser
+        FROM SPRING_BATCH_FILE2ORACLE
+        WHERE ID = 1
+    </select>
+
+</mapper>
