@@ -32,7 +32,8 @@ public class HelloWorldJobConfig {
     public Job helloWorlJob(JobBuilderFactory jobBuilders,
                             StepBuilderFactory stepBuilders) {
         return jobBuilders.get("helloWorldJob")
-                .start(helloWorldStep(stepBuilders)).build();
+                .start(helloWorldStep(stepBuilders))
+                .build();
     }
 
 
@@ -47,6 +48,14 @@ public class HelloWorldJobConfig {
      */
     @Bean
     public Step helloWorldStep(StepBuilderFactory stepBuilders) {
+        return stepBuilders.get("helloWorldStep")
+                .<Person, String>chunk(10).reader(reader())
+                .processor(processor()).writer(writer()).build();
+    }
+
+
+    @Bean
+    public Step hello2WorldStep(StepBuilderFactory stepBuilders) {
         return stepBuilders.get("helloWorldStep")
                 .<Person, String>chunk(10).reader(reader())
                 .processor(processor()).writer(writer()).build();
