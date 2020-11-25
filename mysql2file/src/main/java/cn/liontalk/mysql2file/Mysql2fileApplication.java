@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration;
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
 
 @SpringBootApplication
-//@EnableBatchProcessing
+@EnableBatchProcessing
 @MapperScan("cn.liontalk.mysql2file.dao")
 public class Mysql2fileApplication {
 

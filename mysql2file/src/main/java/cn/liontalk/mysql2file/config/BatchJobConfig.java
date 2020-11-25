@@ -1,7 +1,9 @@
 package cn.liontalk.mysql2file.config;
 
 
+import cn.liontalk.mysql2file.common.CommonItemReader;
 import cn.liontalk.mysql2file.entity.Music;
+import cn.liontalk.mysql2file.service.MusicService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -11,6 +13,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.transform.LineAggregator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +22,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-//@Configuration
+@Configuration
 public class BatchJobConfig {
 
     @Autowired
@@ -32,6 +36,9 @@ public class BatchJobConfig {
 
     @Autowired
     SqlSessionFactory sqlSessionFactory;
+
+    @Autowired
+    private MusicService musicService;
 
 
     private static final String JOB = "job";
@@ -61,43 +68,53 @@ public class BatchJobConfig {
     }
 
     //配置itemReader
-
     @Bean("itemReader")
     @StepScope
-    public MyBatisCursorItemReader<Music> itemReader() {
+    public CommonItemReader<Music> itemReader() {
         System.out.println("开始查询数据库");
-        MyBatisCursorItemReader<Music> reader = new MyBatisCursorItemReader<>();
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Integer> map = new HashMap<>();
         map.put("id", 2);
-        reader.setQueryId("cn.liontalk.mysql2file.dao.queryInfoById");
-        reader.setSqlSessionFactory(sqlSessionFactory);
-        reader.setParameterValues(map);
-        return reader;
+        List<Music> musicList = musicService.queryInfoById(map);
+        return new CommonItemReader<Music>(musicList);
     }
 
 
     //配置itemWriter
 
+//    @Bean("itemWriter")
+//    @StepScope
+//    public FlatFileItemWriter<Music> itemWriter() {
+//        System.out.println("开始写入文件中");
+//        FlatFileItemWriter<Music> writer = new FlatFileItemWriter<>();
+//        writer.setResource(new FileSystemResource("E:\\spring_batch_test_file\\music.txt"));//系统目录
+//        //将Music对象转换成字符串,并输出到文件
+//        writer.setLineAggregator(new LineAggregator<Music>() {
+//            @Override
+//            public String aggregate(Music music) {
+//                ObjectMapper mapper = new ObjectMapper();
+//                String str = null;
+//                try {
+//                    str = mapper.writeValueAsString(music);
+//                } catch (JsonProcessingException e) {
+//                    e.printStackTrace();
+//                }
+//                return str;
+//            }
+//        });
+//        return writer;
+//    }
+
+
     @Bean("itemWriter")
     @StepScope
-    public FlatFileItemWriter<Music> itemWriter() {
-        System.out.println("开始写入文件中");
-        FlatFileItemWriter<Music> writer = new FlatFileItemWriter<>();
-        writer.setResource(new FileSystemResource("E:\\spring_batch_test_file\\music.txt"));//系统目录
-        //将Music对象转换成字符串,并输出到文件
-        writer.setLineAggregator(new LineAggregator<Music>() {
+    public ItemWriter<? super Music> itemWriter() {
+        return new ItemWriter<Music>() {
             @Override
-            public String aggregate(Music music) {
-                ObjectMapper mapper = new ObjectMapper();
-                String str = null;
-                try {
-                    str = mapper.writeValueAsString(music);
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
+            public void write(List<? extends Music> items) throws Exception {
+                for (Music item : items) {
+                    System.out.println("output writer data: " + item);
                 }
-                return str;
             }
-        });
-        return writer;
+        };
     }
 }
