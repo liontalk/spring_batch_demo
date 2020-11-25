@@ -53,7 +53,7 @@ public class HelloWorldJobConfig {
                 .processor(processor()).writer(writer()).build();
     }
 
-    
+
 
 
     @Bean

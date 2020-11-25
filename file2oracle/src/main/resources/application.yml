@@ -20,5 +20,6 @@ spring:
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
   type-aliases-package: cn.liontalk.file2oracle.entity
-
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
