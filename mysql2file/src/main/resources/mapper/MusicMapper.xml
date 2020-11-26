@@ -13,4 +13,11 @@
     </select>
 
 
+    <insert id="save">
+        INSERT INTO
+        music_info(singer_name,music_size,music_name)
+        values
+        (#{music.singerName},#{music.musicSize},#{music.musicName})
+    </insert>
+
 </mapper>

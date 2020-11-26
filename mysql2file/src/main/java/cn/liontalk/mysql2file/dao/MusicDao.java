@@ -12,4 +12,6 @@ public interface MusicDao {
 
     //通过id查询数据库记录
     List<Music> queryInfoById(@Param("param") Map<String, Integer> map);
+
+     int  save(@Param("music") Music music);
 }
