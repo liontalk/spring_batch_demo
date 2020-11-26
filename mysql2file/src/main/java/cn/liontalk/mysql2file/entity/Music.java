@@ -14,6 +14,14 @@ public class Music {
     // 歌曲名
     private String musicName;
 
+    public Music(Integer id, String singerName, String musicSize, String musicName) {
+        super();
+        this.id = id;
+        this.singerName = singerName;
+        this.musicSize = musicSize;
+        this.musicName = musicName;
+    }
+
     public Integer getId() {
         return id;
     }
